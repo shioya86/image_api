@@ -19,11 +19,34 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+    implementation (
+            'com.fasterxml.jackson.module:jackson-module-kotlin',
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.jetbrains.kotlin:kotlin-reflect',
+
+            // Amazon S3
+            "io.awspring.cloud:spring-cloud-aws-starter:3.0.2",
+            "io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.2",
+            "com.amazonaws:aws-java-sdk-s3:1.12.681",
+            "software.amazon.awssdk:s3",
+            platform("software.amazon.awssdk:bom:2.20.0"),
+
+            // Logger
+            "org.springframework.boot:spring-boot-starter-aop"
+    )
+
+    compileOnly (
+            'org.projectlombok:lombok:1.18.10'
+    )
+
+    annotationProcessor(
+            'org.projectlombok:lombok:1.18.10'
+    )
+    testImplementation(
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.jetbrains.kotlin:kotlin-test-junit5'
+    )
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
