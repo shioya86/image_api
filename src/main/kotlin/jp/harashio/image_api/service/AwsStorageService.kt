@@ -1,8 +1,8 @@
 package jp.harashio.image_api.service
 
-import jp.harashio.image_api.dto.db.Image
+import jp.harashio.image_api.domain.db.Image
 import jp.harashio.image_api.domain.ImageResource
-import jp.harashio.image_api.dto.db.User
+import jp.harashio.image_api.domain.db.User
 import jp.harashio.image_api.repository.ImageRepository
 import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,4 +1,4 @@
-package jp.harashio.image_api.dto.response
+package jp.harashio.image_api.domain.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

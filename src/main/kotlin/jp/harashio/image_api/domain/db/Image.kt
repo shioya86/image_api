@@ -1,4 +1,4 @@
-package jp.harashio.image_api.dto.db
+package jp.harashio.image_api.domain.db
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

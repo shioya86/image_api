@@ -1,9 +1,9 @@
 package jp.harashio.image_api.controller
 
 import jp.harashio.image_api.config.EnvironmentType
-import jp.harashio.image_api.dto.request.ImageBase64UploadRequest
+import jp.harashio.image_api.domain.request.ImageBase64UploadRequest
 import jp.harashio.image_api.domain.ImageResource
-import jp.harashio.image_api.dto.db.User
+import jp.harashio.image_api.domain.db.User
 import jp.harashio.image_api.service.AwsStorageService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
