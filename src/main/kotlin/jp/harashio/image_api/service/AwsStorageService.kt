@@ -42,11 +42,30 @@ class AwsStorageService {
         return ByteArray(0)
     }
 
+    fun downloadFileFrom(imageFilename: String): ImageResource {
+        // イメージのファイル名からS3パスを取得
+        val image = imageRepository.findByFilename(imageFilename)
+
+        if (image.isEmpty) {
+            log.error("Image not found: $imageFilename")
+            throw IllegalArgumentException("Image not found: $imageFilename")
+        }
+
+        return image.get().let { img ->
+            val path = img.path
+            val contentType = img.media
+            val imageExtension = img.path.substringAfterLast('.')
+            val imageBytes = downloadFile(path)
+            ImageResource(imageExtension, contentType, imageBytes)
+        }
+    }
+
     fun uploadBase64Image(user: User, s3Path: String, resource: ImageResource) {
         // Base64デコード
         val imageBytes = resource.imageBytes
 
-        val filePath = s3Path + "/" + generateFileName(resource.extension)
+        val filename = generateFileName(resource.extension)
+        val filePath = "$s3Path/$filename"
 
         val request = PutObjectRequest.builder().bucket(bucket).key(filePath)
             .storageClass("STANDARD")
@@ -65,7 +84,7 @@ class AwsStorageService {
         } else {
             log.info("Image uploaded successfully: $filePath")
             // アップロードに成功時、DBに登録する
-            imageRepository.save(Image(null, filePath, null, user.id))
+            imageRepository.save(Image(null, filename, resource.contentType, filePath, null, user.id))
         }
     }
 

@@ -29,7 +29,8 @@ class LoginFilter : OncePerRequestFilter() {
 
     private val excludePatterns = listOf(
         "/api/v1/auth/firebase/login",
-        "/api/v1/auth/firebase/signup"
+        "/api/v1/auth/firebase/signup",
+        "/api/v1/public/images/**"
     )
     private val pathMatcher = AntPathMatcher()
 

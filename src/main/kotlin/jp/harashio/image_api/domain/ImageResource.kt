@@ -4,23 +4,31 @@ import java.util.Base64
 
 class ImageResource {
 
-    private val resource: String
-    val data: String
     val contentType: String
     val extension: String
     val imageBytes: ByteArray
 
     constructor(resource: String) {
-        this.resource = resource
-        this.data = this.resource.substringAfter("base64,")
-        this.contentType = this.resource.substringAfter("data:").substringBefore(";")
+        val data = resource.substringAfter("base64,")
+        this.contentType = resource.substringAfter("data:").substringBefore(";")
         this.extension = getExtensionFromContentType(this.contentType)
 
         // データが存在しない場合は例外を投げる
-        if (this.data.isEmpty() || this.contentType.isEmpty() || this.extension.isEmpty()) {
+        if (data.isEmpty() || this.contentType.isEmpty() || this.extension.isEmpty()) {
             throw IllegalArgumentException("Invalid image resource.")
         }
-        this.imageBytes = Base64.getDecoder().decode(this.data)
+        this.imageBytes = Base64.getDecoder().decode(data)
+    }
+
+    constructor(contentType: String, extension: String, imageBytes: ByteArray) {
+        this.contentType = contentType
+        this.extension = extension
+        this.imageBytes = imageBytes
+
+        // データが存在しない場合は例外を投げる
+        if (this.contentType.isEmpty() || this.extension.isEmpty() || this.imageBytes.isEmpty()) {
+            throw IllegalArgumentException("Invalid image resource.")
+        }
     }
 
     private fun getExtensionFromContentType(contentType: String): String {

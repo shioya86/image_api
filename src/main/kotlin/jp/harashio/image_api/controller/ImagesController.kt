@@ -5,16 +5,15 @@ import jp.harashio.image_api.domain.request.ImageBase64UploadRequest
 import jp.harashio.image_api.domain.ImageResource
 import jp.harashio.image_api.domain.db.User
 import jp.harashio.image_api.service.AwsStorageService
+import jp.harashio.image_api.service.ImageAccessManageService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PathVariable
+
 @RestController
 @RequestMapping("/api/v1/images")
 class ImagesController {
@@ -24,6 +23,9 @@ class ImagesController {
 
     @Autowired
     lateinit var awsStorageService: AwsStorageService
+
+    @Autowired
+    lateinit var imageAccessManageService: ImageAccessManageService
 
     /**
      * Base64で定義されたイメージのアップロード
@@ -38,18 +40,19 @@ class ImagesController {
     }
 
     /**
-     * イメージサンプルの取得
+     *
      */
-    @GetMapping("/sample")
-    fun getSampleImage(): HttpEntity<ByteArray> {
-        val image = awsStorageService.downloadFile("IMG_1226.JPEG")
+    @PostMapping("/{imageId}/{status}")
+    fun updateImageStatus(@PathVariable imageId: String, @PathVariable status: String): Map<String, String> {
 
-        val headers = HttpHeaders()
-        headers.contentType = MediaType.IMAGE_JPEG
-        headers.contentLength = image.size.toLong()
+        val user = SecurityContextHolder.getContext().authentication.principal as User
 
-        return HttpEntity<ByteArray>(image, headers)
+        imageAccessManageService.updateImageAccessStatus(user.id.toString(), imageId, status)
+
+        return mapOf("status" to "ok", "imageId" to imageId, "newStatus" to status)
     }
+
+
 
     private fun getUploadDirectory(user: User): String {
         if (environmentType == EnvironmentType.PRODUCTION) {
