@@ -1,6 +1,6 @@
-package jp.harashio.image_api.domain;
+package jp.harashio.image_api.domain.request
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ImageBase64UploadRequest(
     @JsonProperty("path")

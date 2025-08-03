@@ -22,6 +22,8 @@ dependencies {
     implementation (
             'com.fasterxml.jackson.module:jackson-module-kotlin',
             'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-webflux',
+            "org.springframework.security:spring-security-web:6.5.2",
             'org.jetbrains.kotlin:kotlin-reflect',
 
             // DB
@@ -37,7 +39,15 @@ dependencies {
             platform("software.amazon.awssdk:bom:2.20.0"),
 
             // Logger
-            "org.springframework.boot:spring-boot-starter-aop"
+            "org.springframework.boot:spring-boot-starter-aop",
+
+            // Firebase
+            'com.google.firebase:firebase-admin:9.2.0',
+
+            // JWT
+            'io.jsonwebtoken:jjwt-api:0.11.5',
+            'io.jsonwebtoken:jjwt-impl:0.11.5',
+            'io.jsonwebtoken:jjwt-jackson:0.11.5'
     )
 
     compileOnly (

@@ -1,6 +1,6 @@
 package jp.harashio.image_api.service
 
-import jp.harashio.image_api.domain.ImageBase64UploadRequest
+import jp.harashio.image_api.domain.request.ImageBase64UploadRequest
 import jp.harashio.image_api.domain.ImageResource
 import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
