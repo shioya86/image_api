@@ -1,4 +1,4 @@
-package jp.harashio.image_api.domain.request
+package jp.harashio.image_api.dto.request
 
 data class FirebaseAuthRequest(
     val email: String,

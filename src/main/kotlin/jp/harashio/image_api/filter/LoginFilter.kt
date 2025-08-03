@@ -8,7 +8,7 @@ import io.jsonwebtoken.SigningKeyResolverAdapter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import jp.harashio.image_api.domain.User
+import jp.harashio.image_api.dto.db.User
 import jp.harashio.image_api.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.ParameterizedTypeReference

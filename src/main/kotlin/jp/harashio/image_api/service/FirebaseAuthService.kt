@@ -1,10 +1,10 @@
 package jp.harashio.image_api.service
 
-import jp.harashio.image_api.domain.User
-import jp.harashio.image_api.domain.response.IdentityTookitSigninEmailResponse
+import jp.harashio.image_api.dto.db.User
+import jp.harashio.image_api.dto.response.IdentityTookitSigninEmailResponse
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
-import jp.harashio.image_api.domain.request.FirebaseAuthRequest
+import jp.harashio.image_api.dto.request.FirebaseAuthRequest
 import jp.harashio.image_api.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
