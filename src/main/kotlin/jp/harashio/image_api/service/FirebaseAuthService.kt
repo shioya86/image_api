@@ -1,15 +1,17 @@
 package jp.harashio.image_api.service
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserRecord
+import jp.harashio.image_api.domain.User
 import jp.harashio.image_api.domain.response.IdentityTookitSigninEmailResponse
-import jp.harashio.image_api.domain.request.ImageBase64UploadRequest
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import jp.harashio.image_api.domain.request.FirebaseAuthRequest
+import jp.harashio.image_api.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class FirebaseAuthService {
 
     @Value("\${services.auth.firebase.apiKey}")
@@ -17,6 +19,9 @@ class FirebaseAuthService {
 
     @Value("\${services.auth.firebase.baseUri}")
     lateinit var baseUri: String
+
+    @Autowired
+    private lateinit var userRepository: UserRepository
 
     fun authenticate(request: FirebaseAuthRequest): IdentityTookitSigninEmailResponse {
         // Firebase REST APIでemail/password認証
@@ -57,6 +62,19 @@ class FirebaseAuthService {
             .bodyToMono(IdentityTookitSigninEmailResponse::class.java)
             .block()
 
-        return response ?: throw IllegalStateException("Failed to sign up user with Firebase")
+        if (response?.idToken.isNullOrEmpty()) {
+            throw IllegalStateException("Failed to sign up user")
+        } else {
+            // Firebase でユーザ作成に成功した場合、ユーザ情報をデータベースに保存
+            val user = User(
+                null,
+                uid = response!!.localId,
+                null,
+                null
+            )
+            userRepository.save(user)
+        }
+
+        return response ?: throw IllegalStateException("Failed to sign up with Firebase")
     }
 }

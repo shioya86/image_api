@@ -1,6 +1,5 @@
 package jp.harashio.image_api.service
 
-import jp.harashio.image_api.domain.request.ImageBase64UploadRequest
 import jp.harashio.image_api.domain.ImageResource
 import lombok.extern.slf4j.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +10,6 @@ import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import java.io.ByteArrayInputStream
-import java.util.Base64
 
 @Service
 @Slf4j

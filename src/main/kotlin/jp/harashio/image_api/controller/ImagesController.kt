@@ -3,14 +3,12 @@ package jp.harashio.image_api.controller
 import jp.harashio.image_api.config.EnvironmentType
 import jp.harashio.image_api.domain.request.ImageBase64UploadRequest
 import jp.harashio.image_api.domain.ImageResource
-import jp.harashio.image_api.domain.LoginUser
+import jp.harashio.image_api.domain.User
 import jp.harashio.image_api.service.AwsStorageService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -33,7 +31,7 @@ class ImagesController {
     @PostMapping("/uploadBase64")
     fun uploadImage(@RequestBody image: ImageBase64UploadRequest): Map<String, String> {
 
-        val user = SecurityContextHolder.getContext().authentication.principal as LoginUser
+        val user = SecurityContextHolder.getContext().authentication.principal as User
 
         awsStorageService.uploadBase64Image(getUploadDirectory(user), ImageResource(image.image))
         return mapOf("status" to "ok")
@@ -53,7 +51,7 @@ class ImagesController {
         return HttpEntity<ByteArray>(image, headers)
     }
 
-    private fun getUploadDirectory(user: LoginUser): String {
+    private fun getUploadDirectory(user: User): String {
         if (environmentType == EnvironmentType.PRODUCTION) {
             // 本番環境のアップロードディレクトリの取得ロジック
             throw IllegalArgumentException("本番環境での画像アップロードは未実装です")

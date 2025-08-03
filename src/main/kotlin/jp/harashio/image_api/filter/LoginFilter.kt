@@ -8,10 +8,11 @@ import io.jsonwebtoken.SigningKeyResolverAdapter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import jp.harashio.image_api.domain.LoginUser
+import jp.harashio.image_api.domain.User
+import jp.harashio.image_api.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -32,6 +33,9 @@ class LoginFilter : OncePerRequestFilter() {
     )
     private val pathMatcher = AntPathMatcher()
 
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -43,7 +47,7 @@ class LoginFilter : OncePerRequestFilter() {
         filterChain.doFilter(request, response)
     }
 
-    private fun auth(request: HttpServletRequest): LoginUser {
+    private fun auth(request: HttpServletRequest): User {
         val token = getToken(request)
 
         try {
@@ -55,12 +59,12 @@ class LoginFilter : OncePerRequestFilter() {
             val uid = claim.body.get("user_id").toString()
 
             // ユーザ情報がDBに存在しない場合エラーを吐く
-            // TODO: エラー適当なので要修正
-            if (false) {
+            val user = userRepository.findByUid(uid)
+            if (user.isEmpty) {
                 throw RuntimeException("User not found. (id=$uid)")
             }
 
-            return LoginUser(uid)
+            return user.get()
 
         } catch (e: Exception) {
             throw RuntimeException("Invalid token", e)
@@ -93,14 +97,12 @@ class LoginFilter : OncePerRequestFilter() {
                     return null
                 }
 
-                println("jwsHeader.keyId=${jwsHeader.keyId}")
                 val keyValue: String? = map[jwsHeader.keyId].toString()
                     .replace("-----BEGIN CERTIFICATE-----\n", "")
                     .replace("-----END CERTIFICATE-----\n", "")
                     .replace("\\s".toRegex(), "")
 
                 val inputStream = ByteArrayInputStream(Base64.decodeBase64(keyValue))
-                println(inputStream)
                 val certificate = CertificateFactory.getInstance("X.509").generateCertificate(inputStream) as X509Certificate
 
 
