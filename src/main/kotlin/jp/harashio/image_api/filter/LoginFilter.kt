@@ -27,8 +27,8 @@ import java.security.cert.X509Certificate
 class LoginFilter : OncePerRequestFilter() {
 
     private val excludePatterns = listOf(
-        "/api/v1/auth/login",
-        "/api/v1/auth/firebase/login"
+        "/api/v1/auth/firebase/login",
+        "/api/v1/auth/firebase/signup"
     )
     private val pathMatcher = AntPathMatcher()
 

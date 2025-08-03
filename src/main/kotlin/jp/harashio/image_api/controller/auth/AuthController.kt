@@ -20,4 +20,11 @@ class AuthController {
     fun authenticate(@RequestBody request: FirebaseAuthRequest): IdentityTookitSigninEmailResponse {
         return authService.authenticate(request)
     }
+
+    @PostMapping("/firebase/signup")
+    fun signUp(@RequestBody request: FirebaseAuthRequest): Map<String, String> {
+        authService.signUp(request.email, request.password)
+
+        return mapOf("status" to "ok")
+    }
 }

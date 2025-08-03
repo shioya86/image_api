@@ -20,7 +20,7 @@ class FirebaseAuthService {
 
     fun authenticate(request: FirebaseAuthRequest): IdentityTookitSigninEmailResponse {
         // Firebase REST APIでemail/password認証
-        val uri = "$baseUri?key=$apiKey"
+        val uri = "$baseUri:signInWithPassword?key=$apiKey"
 
         val webClient = WebClient.create()
         val response: IdentityTookitSigninEmailResponse? = webClient.post()
@@ -38,5 +38,25 @@ class FirebaseAuthService {
 
         return response ?: throw IllegalStateException("Failed to authenticate with Firebase")
     }
-}
 
+    fun signUp(email: String, password: String): IdentityTookitSigninEmailResponse {
+        // Firebase REST APIでユーザー新規作成
+        val uri = "$baseUri:signUp?key=$apiKey"
+
+        val webClient = WebClient.create()
+        val response: IdentityTookitSigninEmailResponse? = webClient.post()
+            .uri(uri)
+            .bodyValue(
+                mapOf(
+                    "email" to email,
+                    "password" to password,
+                    "returnSecureToken" to true
+                )
+            )
+            .retrieve()
+            .bodyToMono(IdentityTookitSigninEmailResponse::class.java)
+            .block()
+
+        return response ?: throw IllegalStateException("Failed to sign up user with Firebase")
+    }
+}
