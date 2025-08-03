@@ -33,7 +33,7 @@ class ImagesController {
 
         val user = SecurityContextHolder.getContext().authentication.principal as User
 
-        awsStorageService.uploadBase64Image(getUploadDirectory(user), ImageResource(image.image))
+        awsStorageService.uploadBase64Image(user, getUploadDirectory(user), ImageResource(image.image))
         return mapOf("status" to "ok")
     }
 
