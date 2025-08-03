@@ -23,9 +23,9 @@ data class Image (
     @Column(name = "user_id", nullable = false)
     val userId: Long? = null,
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false)
     val createdAt: java.sql.Timestamp? = null,
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", insertable = false)
     val updatedAt: java.sql.Timestamp? = null
 )

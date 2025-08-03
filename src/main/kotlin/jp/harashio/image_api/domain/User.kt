@@ -12,9 +12,9 @@ data class User (
     @Column(nullable = false, unique = true)
     val uid: String = "",
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false)
     val createdAt: java.sql.Timestamp? = null,
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", insertable = false)
     val updatedAt: java.sql.Timestamp? = null
 )

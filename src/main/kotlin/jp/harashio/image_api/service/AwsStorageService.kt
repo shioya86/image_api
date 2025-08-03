@@ -65,7 +65,7 @@ class AwsStorageService {
         } else {
             log.info("Image uploaded successfully: $filePath")
             // アップロードに成功時、DBに登録する
-            imageRepository.save(Image(null, filePath, null, user.id, null, null))
+            imageRepository.save(Image(null, filePath, null, user.id))
         }
     }
 

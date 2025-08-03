@@ -68,9 +68,7 @@ class FirebaseAuthService {
             // Firebase でユーザ作成に成功した場合、ユーザ情報をデータベースに保存
             val user = User(
                 null,
-                uid = response!!.localId,
-                null,
-                null
+                uid = response!!.localId
             )
             userRepository.save(user)
         }
